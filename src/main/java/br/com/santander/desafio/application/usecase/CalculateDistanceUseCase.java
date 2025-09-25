@@ -26,7 +26,7 @@ public class CalculateDistanceUseCase {
                 .anyMatch(a -> a.pos().x() == x && a.pos().y() == y);
         if (!exist) {
             throw new IllegalArgumentException(
-                    "Nenhuma agência encontrada com as coordenadas (" + x + "," + y + ")"
+                    "Nenhuma agência encontrada com as coordenadas (" + x + "," + y + "), tente novamente"
             );
         }
 
