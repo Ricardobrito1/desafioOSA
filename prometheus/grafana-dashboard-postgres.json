@@ -1,0 +1,62 @@
+{
+  "title": "PostgreSQL - Volumetria (Conexões, Tamanho, IUD, Locks, Cache)",
+  "schemaVersion": 39,
+  "version": 1,
+  "timezone": "browser",
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Conexões Totais",
+      "targets": [
+        { "expr": "pg_stat_activity_count{datname=\"desafio\"}" }
+      ],
+      "gridPos": { "x": 0, "y": 0, "w": 6, "h": 4 }
+    },
+    {
+      "type": "bargauge",
+      "title": "Conexões por Estado",
+      "targets": [
+        { "expr": "sum by (state) (pg_stat_activity_count{datname=\"desafio\"})" }
+      ],
+      "gridPos": { "x": 6, "y": 0, "w": 6, "h": 4 }
+    },
+    {
+      "type": "stat",
+      "title": "Tamanho do Banco (GB)",
+      "targets": [
+        { "expr": "pg_database_size_bytes{datname=\"desafio\"} / 1024 / 1024 / 1024" }
+      ],
+      "gridPos": { "x": 0, "y": 4, "w": 6, "h": 4 }
+    },
+    {
+      "type": "timeseries",
+      "title": "Inserções/Atualizações/Deleções por segundo",
+      "targets": [
+        { "expr": "rate(pg_stat_database_tup_inserted{datname=\"desafio\"}[5m])", "legendFormat": "insert/s" },
+        { "expr": "rate(pg_stat_database_tup_updated{datname=\"desafio\"}[5m])", "legendFormat": "update/s" },
+        { "expr": "rate(pg_stat_database_tup_deleted{datname=\"desafio\"}[5m])", "legendFormat": "delete/s" }
+      ],
+      "gridPos": { "x": 6, "y": 4, "w": 6, "h": 8 }
+    },
+    {
+      "type": "timeseries",
+      "title": "Locks",
+      "targets": [
+        { "expr": "pg_locks_count{datname=\"desafio\"}" }
+      ],
+      "gridPos": { "x": 0, "y": 8, "w": 6, "h": 8 }
+    },
+    {
+      "type": "gauge",
+      "title": "Cache Hit Ratio (%)",
+      "targets": [
+        {
+          "expr": "100 * (pg_stat_database_blks_hit{datname=\"desafio\"} / (pg_stat_database_blks_hit{datname=\"desafio\"} + pg_stat_database_blks_read{datname=\"desafio\"}))"
+        }
+      ],
+      "gridPos": { "x": 6, "y": 12, "w": 6, "h": 4 },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] } }
+    }
+  ],
+  "time": { "from": "now-15m", "to": "now" }
+}

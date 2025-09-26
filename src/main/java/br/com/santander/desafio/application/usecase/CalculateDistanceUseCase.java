@@ -1,38 +1,35 @@
 package br.com.santander.desafio.application.usecase;
 
 
-import br.com.santander.desafio.domain.model.*;
+import br.com.santander.desafio.domain.model.Agency;
+import br.com.santander.desafio.domain.model.Point;
 import br.com.santander.desafio.domain.port.AgencyRepository;
-import br.com.santander.desafio.domain.service.DistanceService;
+import br.com.santander.desafio.domain.util.DistanceUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class CalculateDistanceUseCase {
-    private final AgencyRepository rep;
-    private final DistanceService service;
-    public List<Distance> result(int x, int y){
-        var p = new Point(x,y);
-        var agencies = rep.listAllAgencys();
+    public final AgencyRepository agencyRepository;
+
+    public List<Agency> execute(Long x, Long y) {
+        Point point = Point.builder()
+                .y(y)
+                .x(x)
+                .build();
+        List<Agency> agencies = agencyRepository.listAllAgencies();
 
         if (agencies.isEmpty()) {
             throw new IllegalArgumentException("Nenhuma agência cadastrada");
         }
 
-        boolean exist = agencies.stream()
-                .anyMatch(a -> a.pos().x() == x && a.pos().y() == y);
-        if (!exist) {
-            throw new IllegalArgumentException(
-                    "Nenhuma agência encontrada com as coordenadas (" + x + "," + y + "), tente novamente"
-            );
-        }
-
         return agencies.stream()
-                .map(d -> new Distance(d.id(), service.calculate(p, d.pos())))
-                .sorted()
+                .peek(agency -> agency.setDistance(DistanceUtil.calculate(agency.getPos(), point)))
+                .sorted(Comparator.comparingDouble(Agency::getDistance))
                 .toList();
     }
 

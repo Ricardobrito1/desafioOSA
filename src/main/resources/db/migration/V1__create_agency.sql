@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS agency (
-    id    VARCHAR(64) PRIMARY KEY,
-    position_x INTEGER NOT NULL,
-    position_y INTEGER NOT NULL
+     id          UUID PRIMARY KEY,
+    name        VARCHAR(255) UNIQUE NOT NULL,
+    position_x  BIGINT NOT NULL,
+    position_y  BIGINT NOT NULL
     );

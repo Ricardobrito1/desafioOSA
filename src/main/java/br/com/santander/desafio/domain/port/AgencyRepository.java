@@ -1,13 +1,17 @@
 package br.com.santander.desafio.domain.port;
 
 import br.com.santander.desafio.domain.model.Agency;
+import br.com.santander.desafio.infra.jpa.AgencyEntity;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 public interface AgencyRepository {
 
-    void save(Agency agency);
-    List<Agency>listAllAgencys();
+    Agency save(Agency agency);
+    List<Agency> listAllAgencies();
 
-    boolean exists(String id);
+    Optional<Agency> findById(UUID id);
+
 }

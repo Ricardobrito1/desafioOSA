@@ -1,4 +1,20 @@
 package br.com.santander.desafio.domain.model;
 
-public record Agency(String id, Point pos) {
+import lombok.*;
+
+import java.util.UUID;
+
+@Builder
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+public class Agency{
+
+    private UUID id;
+    private String name;
+    private Point pos;
+
+    private Double distance;
+
 }

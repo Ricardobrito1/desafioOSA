@@ -1,6 +1,6 @@
 package br.com.santander.desafio;
 
-import br.com.santander.desafio.domain.service.DistanceService;
+import br.com.santander.desafio.domain.util.DistanceUtil;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +12,7 @@ public class DesafioOsaApplication {
     }
 
     @Bean
-    public DistanceService distanceService(){
-        return new DistanceService();
+    public DistanceUtil distanceService(){
+        return new DistanceUtil();
     }
 }

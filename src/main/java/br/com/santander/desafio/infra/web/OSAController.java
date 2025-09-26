@@ -1,10 +1,12 @@
 package br.com.santander.desafio.infra.web;
 
 
+import br.com.santander.desafio.application.mappers.AgencyMapper;
 import br.com.santander.desafio.application.usecase.CalculateDistanceUseCase;
 import br.com.santander.desafio.application.usecase.CreateBankAgencyUseCase;
+import br.com.santander.desafio.domain.model.Agency;
 import br.com.santander.desafio.infra.web.dto.AgencyRequest;
-import br.com.santander.desafio.infra.web.dto.DistanceResponse;
+import br.com.santander.desafio.infra.web.dto.AgencyResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,14 +22,24 @@ public class OSAController {
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public void create (@Valid @RequestBody AgencyRequest agencyRequest){
-        createUseCase.exec(agencyRequest.id(), agencyRequest.posX(), agencyRequest.posY());
+    public AgencyResponse create (
+            @Valid
+            @RequestBody
+            AgencyRequest agencyRequest
+    ){
+        Agency agency = createUseCase.execute(AgencyMapper.fromRequest(agencyRequest));
+        return AgencyMapper.toResponse(agency);
     }
 
 
     @GetMapping("/distance")
-    public List<DistanceResponse>distanceList(@RequestParam int x, @RequestParam int y){
-        return distanceUseCase.result(x,y).stream().map(r -> new DistanceResponse("Agency_"+r.agencyId(), String.format("%.2f", r.value())))
+    public List<AgencyResponse>distanceList(
+            @RequestParam Long x,
+            @RequestParam Long y
+    ){
+        return distanceUseCase.execute(x,y)
+                .stream()
+                .map(AgencyMapper :: toResponse)
                 .toList();
 
     }
