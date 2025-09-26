@@ -2,15 +2,15 @@ package br.com.santander.desafio.infra.web;
 
 
 import br.com.santander.desafio.application.mappers.AgencyMapper;
-import br.com.santander.desafio.application.usecase.CalculateDistanceUseCase;
-import br.com.santander.desafio.application.usecase.CreateBankAgencyUseCase;
 import br.com.santander.desafio.domain.model.Agency;
+import br.com.santander.desafio.domain.port.in.CalculateDistanceUseCase;
+import br.com.santander.desafio.domain.port.in.CreateBankAgencyUseCase;
 import br.com.santander.desafio.infra.web.dto.AgencyRequest;
 import br.com.santander.desafio.infra.web.dto.AgencyResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import jakarta.validation.Valid;
 
 import java.util.List;
 

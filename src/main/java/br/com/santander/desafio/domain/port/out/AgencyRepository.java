@@ -1,4 +1,4 @@
-package br.com.santander.desafio.domain.port;
+package br.com.santander.desafio.domain.port.out;
 
 import br.com.santander.desafio.domain.model.Agency;
 import br.com.santander.desafio.infra.jpa.AgencyEntity;
@@ -12,6 +12,5 @@ public interface AgencyRepository {
     Agency save(Agency agency);
     List<Agency> listAllAgencies();
 
-    Optional<Agency> findById(UUID id);
 
 }
