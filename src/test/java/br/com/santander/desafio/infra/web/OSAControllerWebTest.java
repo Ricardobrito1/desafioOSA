@@ -31,35 +31,44 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = OSAController.class)
 class OSAControllerWebTest {
 
-    @Autowired MockMvc mvc;
-    @Autowired ObjectMapper om;
+    @Autowired
+    MockMvc mvc;
+    @Autowired
+    ObjectMapper om;
 
-    @MockBean CreateBankAgencyUseCase cadastrar;   // <- vira bean no contexto
-    @MockBean CalculateDistanceUseCase calcular;   // <- vira bean no contexto
+    @MockBean
+    CreateBankAgencyUseCase cadastrar;
+    @MockBean
+    CalculateDistanceUseCase calcular;
 
     @Test
     void getDistanciaSemAuth_deveRetornar200() throws Exception {
-        when(calcular.result(anyInt(), anyInt())).thenReturn(List.of());
-        mvc.perform(get("/desafio/distance").param("posX","-5").param("posY","-2"))
+        when(calcular.result(anyInt(), anyInt())).thenReturn(List.of()); // ou uma lista com 1 item
+
+        mvc.perform(get("/desafio/distance")
+                        .param("x", "-5")
+                        .param("y", "-2")
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-    }
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));}
 
-    @Test
-    void postCadastrar_semAuth_deveRetornar401() throws Exception {
-        var body = om.writeValueAsString(new AgencyRequest("1",-2,2));
-        mvc.perform(post("/desafio/create").contentType(MediaType.APPLICATION_JSON).content(body))
-                .andExpect(status().isUnauthorized());
-    }
 
-    @Test
-    void postCadastrar_comAuth_deveRetornar201() throws Exception {
-        var body = om.writeValueAsString(new AgencyRequest("1",-2,2));
-        mvc.perform(post("/desafio/create")
-                        .with(httpBasic("user","senha123"))
-                        .contentType(MediaType.APPLICATION_JSON).content(body))
-                .andExpect(status().isCreated());
-    }
+        @Test
+        void postCadastrar_semAuth_deveRetornar401 () throws Exception {
+            var body = om.writeValueAsString(new AgencyRequest("1", -2, 2));
+            mvc.perform(post("/desafio/create").contentType(MediaType.APPLICATION_JSON).content(body))
+                    .andExpect(status().isUnauthorized());
+        }
+
+        @Test
+        void postCadastrar_comAuth_deveRetornar201 () throws Exception {
+            var body = om.writeValueAsString(new AgencyRequest("1", -2, 2));
+            mvc.perform(post("/desafio/create")
+                            .with(httpBasic("user", "senha123"))
+                            .contentType(MediaType.APPLICATION_JSON).content(body))
+                    .andExpect(status().isCreated());
+        }
+
 
 
 }
